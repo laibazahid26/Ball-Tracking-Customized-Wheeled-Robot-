@@ -83,32 +83,32 @@ The important part of this architecture is randomizing various tasks performed b
  
 Below I’ll explain the working of each class, function, and, call-back, built inside our assignment2.py node. 
 
-    • #### main()
+    • main()
 
 	In the main function first we have initialized the ROS parameters, we have just subscribed and 	published to a few topics. 
 	Topics subscribed: 
-    1. "/robot/odom"  (call-back function: newOdom)
-    2. "/robot/camera1/image_raw/compressed"  ( Call-back function: detectBall)
+    	1. "/robot/odom"  (call-back function: newOdom)
+    	2. "/robot/camera1/image_raw/compressed"  ( Call-back function: detectBall)
        
 	Topics published: 
-    1. "/robot/cmd_vel"
+    	1. "/robot/cmd_vel"
 
 	And in the main we have added the three behaviors/states in the Finite State Machine.      
 
-    • #### newOdom()
+    • newOdom()
 	
-	This function is the callback of the the topic /robot/odom extracts the x and y location of the 	robot and converts the angle, which is in the quaternion form, of the robot with respect to the 	world frame into radians. These x,y,theta have been made global because they will be used in 	may other functions as well. 
+	This function is the callback of the the topic /robot/odom extracts the x and y location of the robot and converts the angle, which is in the quaternion 	 form, of the robot with respect to the world frame into radians. These x,y,theta have been made global because they will be used in may other functions as 	    well. 
 
-    • #### class Normal()
+    •  class Normal()
 	
-	In Normal state a random number times (from 1 to 5) random coordinates were generated 	within the area. These coordinates were then passed to the go_to_goal() function, which takes 	care of moving the robot to the generated random coordinate. This function also checks the 	parameter "detectBall Flag", if the flag is 1, this means that the ball was detected, and then it 	transitions to the PLAY state. If no ball was detected, it then transitions to the SLEEP state after 	completing this behavior.
+	In Normal state a random number times (from 1 to 5) random coordinates were generated within the area. These coordinates were then passed to the 	           go_to_goal() function, which takes care of moving the robot to the generated random coordinate. This function also checks the parameter "detectBall Flag", 	      if the flag is 1, this means that the ball was detected, and then it transitions to the PLAY state. If no ball was detected, it then transitions to the 		SLEEP state after completing this behavior.
 
-    • #### go_to_goal()
+    •  go_to_goal()
 
-	This function generates the velocity commands to move the robot to the coordinate received in 	the parameter. This function also keeps checking the parameter "detectBallFlag", and if this 	parameter is 1 and the robot is in the NORMAL state, the function stops, because this means 	that now the robot is not required to go to the given coordinate, and the robot just needs to 	follow the ball, and the function is no longer needed.
+	This function generates the velocity commands to move the robot to the coordinate received in the parameter. This function also keeps checking the 		parameter "detectBallFlag", and if this parameter is 1 and the robot is in the NORMAL state, the function stops, because this means that now the robot is 	  not required to go to the given coordinate, and the robot just needs to follow the ball, and the function is no longer needed.
 	
-	Important information about the ‘Path Planner’ and the ‘Robot Controller’ node which 	are built inside the go_to_goal() function: 
-	The important thing to note here is that in the assignment we have implemented the Path 	Planner node and the Robot controller node in the same node built inside go_to_goal_function() 	and they work together. Following is their combined functionality:
+	Important information about the ‘Path Planner’ and the ‘Robot Controller’ node which are built inside the go_to_goal() function: 
+	The important thing to note here is that in the assignment we have implemented the Path Planner node and the Robot controller node in the same node built 	  inside go_to_goal_function() 	and they work together. Following is their combined functionality:
 
 	Keep rotating the robot until the robot gets aligned with the goal position.
 	speed = Twist() 
@@ -116,32 +116,32 @@ Below I’ll explain the working of each class, function, and, call-back, built 
 	speed.angular.z = 0.2
 	
 	
-	Once the robot is aligned with the target keep generating the linear velocity till the robot has 	reached the goal. 
+	Once the robot is aligned with the target keep generating the linear velocity till the robot has reached the goal. 
 	speed = Twist() 
 	speed.angular.z = 0.0
 	speed.linear.x = 0.5 
 
-    • #### detectBall()
+    • detectBall()
       
-      This function is the callback of the Camera Image topic. This function uses Open CV to process the image received, and detects the contours of Green ball in that image. If any contour is found, it turns the Parameter "detectBallFlag" to 1, otherwise turns it to 0.
+      This function is the callback of the Camera Image topic. This function uses Open CV to process the image received, and detects the contours of Green ball in 	 	that image. If any contour is found, it turns the Parameter "detectBallFlag" to 1, otherwise turns it to 0.
 
-    • #### class Play():
-	In PLAY state the robot has to use its camera to track and follow the green ball. In this state, the 	image received from the Robot's camera is processed using Open CV to detect any contours of 	the green ball.
+    • class Play():
+	In PLAY state the robot has to use its camera to track and follow the green ball. In this state, the image received from the Robot's camera is processed 	 using Open CV to detect any contours of the green ball.
     	
-	If any contour is found, the Robot is directed to go near the ball, otherwise the Robot is directed 	to rotate, and find the ball. Once the Robot has reached near the ball, the robot rotates its head 	right, and left upto 45 degrees and then again looks for the ball.
+	If any contour is found, the Robot is directed to go near the ball, otherwise the Robot is directed to rotate, and find the ball. Once the Robot has 	  	  reached near the ball, the robot rotates its head right, and left upto 45 degrees and then again looks for the ball.
     
 	The robot searches for the ball for 10 seconds. This functionality is implemented using a timer.
       	
 
 ### System’s limitations:
 
-    1. If the robot has to go to a certain target from the second and third quadrant, the controller does not work in a efficient way. After the robot has aligned itself one time to the goal and then when it starts to move linearly towards the goal, the robot stopped and turn again in order to again aligns itself with the goal. 
+    1. If the robot has to go to a certain target from the second and third quadrant, the controller does not work in a efficient way. After the robot has aligned 	  itself one time to the goal and then when it starts to move linearly towards the goal, the robot stopped and turn again in order to again aligns itself 	 with the goal. 
 	
-	We believe this happens because when the robot has aligned itself once with the goal by 	generating angular velocity, then it produces linear velocity to move towards the goal. Because 	of inertia and wheel movement the robot gets a little nonaligned from the goal position and 	takes the complete revolution in order to align.
+	We believe this happens because when the robot has aligned itself once with the goal by generating angular velocity, then it produces linear velocity to 	 move towards the goal. Because of inertia and wheel movement the robot gets a little nonaligned from the goal position and takes the complete revolution 	  in order to align.
       
     2. The robot takes the complete turn irrespective of the direction of the goal location. 
 
-    3. There is no way to come out of the Play behavior unless the Play behavior finishes. Only after finishing the Play behavior the robot goes back to the Normal behavior.
+    3. There is no way to come out of the Play behavior unless the Play behavior finishes. Only after finishing the Play behavior the robot goes back to the 	  	 Normal behavior.
        
     4. Error handling is not done in the system.
     5. The launching this node, the node can’t be interrupted (by Ctrl-C) and has to be closed by completely by shutting the terminal. 
@@ -155,9 +155,9 @@ Below I’ll explain the working of each class, function, and, call-back, built 
 I collaborated with a fellow colleague fro doing this assignment. Only the writing of readme file and making the github repository was done individually.  
 Below I mention the names and contacts of both of us. 
 
-Author 1: Laiba Zahid (S4853477)					      email ID: laibazahid26@gmail.com
+Author 1: Laiba Zahid (S4853477)		        email ID: laibazahid26@gmail.com
 Author 2: Syed Muhammad Raza Rizvi (S4853521)		email ID: smrazarizvi96@gmail.com
 
-References:
+### References:
     1. https://www.theconstructsim.com/ros-qa-053-how-to-move-a-robot-to-a-certain-point-using-twist/
  
