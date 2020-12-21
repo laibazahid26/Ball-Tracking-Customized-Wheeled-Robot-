@@ -66,7 +66,8 @@ We were already provided with a package called exp_experiment 2. Inside this fol
       
 ### Installation and Running Procedure:
 
-    • Do a git clone: git clone https://github.com/laibazahid26/exp_rob_assignment_2 
+    • Clone the repository by going on the link:
+    	https://github.com/laibazahid26/exp_rob_assignment_2 
     • Place this folder inside the src folder of your workspace. 
     • Go in your workspace using terminal and then do a catkin_make.
     • In the previous step you were in your workspace. Now move to the scripts folder of your exp_assignment2 package and give running permissions to it by             writing the following command:
