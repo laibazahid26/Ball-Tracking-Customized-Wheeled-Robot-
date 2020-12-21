@@ -20,7 +20,7 @@ Following are the objectives of this assignment.
 
 Below is the image of my architecture. 
 
-![alt text](https://github.com/laibazahid26/exp_rob_assignment_2/blob/main/architecture.png?raw=true)
+![alt text](https://github.com/laibazahid26/exp_rob_assignment_2/blob/master/architecture.png?raw=true)
 
 The camera takes the picture of the entire arena. The arena is a fixed 8x8 units area. This arena may or may not have a ball and has a robot. The “Rigid Body Detector” node takes data from the camera and detects all the rigid bodies on the image and find their coordinates as well for example, the robot and the ball can be present on the image. Depending if the ball was detected by the Rigid Body Detector or not ROS parameter server detectPlayFlag is set. There is another parameter used for checking in which state the finite state machine currently is, and that parameter is called as state. Basing on these two parameters the “The Command Manager” node produces a final target. If the ball was detected then OpenCV was used to follow the ball. If the ball was not present then a random target can be produced (normal behavior). The “Command Manger” node then gives the target to the “Path Planner” node and the “Path Planner” node after knowing the current position of the robot and the target, publishes a complete trajectory which the robot needs to follow. Finally, the “Robot Controller” node generates velocity commands one by one to reach to each vector.  
 
@@ -37,7 +37,7 @@ The camera takes the picture of the entire arena. The arena is a fixed 8x8 units
 
 Below is the state diagram of this architecture. This finite state machine lies inside the command manager node of my architecture.
 
-![alt text](https://github.com/laibazahid26/exp_rob_assignment_2/blob/main/finiteStateMachine.png?raw=true)
+![alt text](https://github.com/laibazahid26/exp_rob_assignment_2/blob/master/finiteStateMachine.png?raw=true)
 
 As can be seen, there are three states, i.e. Normal, Sleep and, Play. The robot comes to life in being in the Normal state. Since we were required to ‘decide’ upon when the robot goes to sleep, we decided that whenever the robot finishes the normal behavior ‘or’ the ball was not detected for 10 seconds, then the robot goes to the Sleep behavior. We also decided that the robot will come out of the Sleep behavior when it finishes its sleeping time, i.e. after finishing sleep time, the robot goes back to the Normal state. 
 
