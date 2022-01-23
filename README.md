@@ -55,7 +55,7 @@ We were already provided with a package called exp_experiment 2. Inside this fol
       
   `sudo apt-get install ros-[ROS_version]-gazebo-ros-pkgs ros-[ROS_version]-gazebo-ros-control`
       
- This package at allows for setting robot links positions and adds the functionality of letting the arm go to the goal position.
+ This package allows for setting robot links positions and adds the functionality of letting the links and joints go to the goal position.
 
 * Add <transmission tag> in your xacro file, for each joint of the robot we have to put a <transmission > tag. In this assignment we just used one transmission tag because we wanted to control just one joint (the joint for rotating the head).
 
